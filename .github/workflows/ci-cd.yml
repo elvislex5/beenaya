@@ -28,7 +28,7 @@ jobs:
       - name: Build and start Docker containers with environment variables
         run: |
           export SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"
-          export DEBUG=False
+          export DEBUG=True
           export POSTGRES_DB=beenaya
           export POSTGRES_USER=beenaya
           export POSTGRES_PASSWORD=beenaya
