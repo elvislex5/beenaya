@@ -19,7 +19,7 @@ class User(AbstractUser):
         choices=Role.choices,
         default=Role.ENTREPRENEUR,
     )
-    telephone = models.CharField(max_length=15, blank=True)
+    telephone = models.CharField(max_length=20, blank=True)
     entreprise = models.CharField(max_length=100, blank=True)
     photo_profil = models.ImageField(upload_to='profils/', blank=True, null=True)
     date_derniere_connexion = models.DateTimeField(blank=True, null=True)
