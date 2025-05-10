@@ -1,0 +1,45 @@
+name: CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - develop  # Le workflow sera exécuté lorsqu'un push est effectué sur 'develop'
+      - main     # Le workflow sera exécuté lorsqu'un push est effectué sur 'main'
+  pull_request:
+    branches:
+      - main     # Le workflow sera aussi exécuté lors des pull requests vers 'main'
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    services:
+      docker:
+        image: docker:19.03.12
+        options: --privileged
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Docker
+        uses: docker/setup-buildx-action@v1
+
+      - name: Build and start Docker containers
+        run: |
+          docker compose -f docker-compose.yml up --build -d
+
+      - name: Wait for Django app to be ready
+        run: |
+          until curl -s http://localhost:8000 > /dev/null; do
+            echo "Waiting for Django to start..."
+            sleep 5
+          done
+
+      - name: Run tests
+        run: |
+          docker compose exec -T web python manage.py test
+
+      - name: Stop Docker containers
+        run: |
+          docker compose down
