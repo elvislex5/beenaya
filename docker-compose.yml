@@ -10,9 +10,20 @@ services:
       - .env
     depends_on:
       - db
+    environment:
+      - SECRET_KEY=${SECRET_KEY}
+      - DEBUG=${DEBUG:-False}
+      - POSTGRES_DB=${POSTGRES_DB:-beenaya}
+      - POSTGRES_USER=${POSTGRES_USER:-beenaya}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-beenaya}
+      - DB_HOST=${DB_HOST:-db}  # Utilisera 'db' par défaut, parfait pour CI
 
   db:
     image: postgres:14
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB:-beenaya}
+      - POSTGRES_USER=${POSTGRES_USER:-beenaya}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:-beenaya}
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:

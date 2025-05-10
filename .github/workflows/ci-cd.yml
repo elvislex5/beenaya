@@ -25,9 +25,17 @@ jobs:
       - name: Set up Docker
         uses: docker/setup-buildx-action@v1
 
-      - name: Build and start Docker containers
+      - name: Build and start Docker containers with environment variables
         run: |
-          docker compose -f docker-compose.yml up --build -d
+          export SECRET_KEY="${{ secrets.DJANGO_SECRET_KEY }}"
+          export DEBUG=False
+          export POSTGRES_DB=beenaya
+          export POSTGRES_USER=beenaya
+          export POSTGRES_PASSWORD=beenaya
+          export DB_HOST=db
+
+          docker compose up --build -d
+      
 
       - name: Wait for Django app to be ready
         run: |
