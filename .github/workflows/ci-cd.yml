@@ -35,7 +35,6 @@ jobs:
           export DB_HOST=db
 
           docker compose up --build -d
-      
 
       - name: Wait for Django app to be ready
         run: |
